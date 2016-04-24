@@ -1,3 +1,10 @@
+<?php
+  if (isset($_POST['periscope'])) {
+    //Скачиваем JSON трансляции:
+    echo file_get_contents($_POST['periscope']);
+    die();
+  }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,9 +70,11 @@
     tokens.forEach(function(token) {
       
       //Получаем JSON трансляции:
-      var url = 'https://api.periscope.tv/api/v2/getAccessPublic?token='+token;
-      $.getJSON(url,
+      var url = 'https://api.periscope.tv/api/v2/getAccessPublic?broadcast_id='+token;
+      $.post(location.href,{periscope: url},
       function(jsonData) {
+        
+        jsonData = JSON.parse(jsonData); 
         
         //Проверяем, есть ли ссылка на трансляцию:
         if ('hls_url' in jsonData && count < 10) {
